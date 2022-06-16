@@ -14,6 +14,7 @@ help:
 	@echo " - test_coverage               	test and exports coverage report"
 	@echo " - vet                         	examines Go source code and reports suspicious constructs"
 	@echo " - tidy                        	run go mod tidy"
+	@echo " - fmt               		  			run go fmt"
 	@echo " - lint               		  			run golangci-lint linter"
 	@echo " - install_tools               	install dev tools"
 	@echo " - gen_swagger            				generate the swagger spec from code comments"
@@ -51,15 +52,20 @@ vet:
 tidy:
 	go mod tidy
 
+.PHONY: fmt
+fmt:
+	gofumpt -l -w .
+
 .PHONY: lint
 lint:
-	golangci-lint run --enable-all
+	golangci-lint run
 
 .PHONY: install_tools
 install_tools:
 	go mod download
 	go install github.com/go-swagger/go-swagger/cmd/swagger
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint
+	go install mvdan.cc/gofumpt
 
 .PHONY: generate_swagger
 generate_swagger:

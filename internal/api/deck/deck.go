@@ -24,6 +24,7 @@ package deck
 
 import (
 	"net/http"
+
 	"scenario/internal/context"
 	"scenario/internal/models"
 	"scenario/internal/service"
@@ -31,13 +32,13 @@ import (
 	"github.com/ggicci/httpin"
 )
 
-// CreateDeckInput input for creating a deck
+// CreateDeckInput input for creating a deck.
 type CreateDeckInput struct {
 	Cards    string `in:"query=cards"`
 	Shuffled bool   `in:"query=shuffled;default=false"`
 }
 
-// CreateDeck create a deck
+// CreateDeck create a deck.
 func CreateDeck(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation POST /deck deck createDeck
 	//
@@ -76,7 +77,7 @@ func CreateDeck(w http.ResponseWriter, r *http.Request) {
 	//     schema:
 	//       "$ref": "#/definitions/APIError"
 
-	c := context.NewContext(w, r)
+	ctx := context.NewContext(w, r)
 	input := r.Context().Value(httpin.Input).(*CreateDeckInput)
 
 	deck, err := service.CreateDeck(service.CreateDeckOptions{
@@ -84,24 +85,25 @@ func CreateDeck(w http.ResponseWriter, r *http.Request) {
 		Cards:    input.Cards,
 	})
 	if err != nil {
-		if models.IsErrInvalidCardCode(err) ||
-			models.IsErrDuplicateCardCode(err) {
-			c.Error(http.StatusUnprocessableEntity, err)
+		if models.IsInvalidCardCodeError(err) ||
+			models.IsDuplicateCardCodeError(err) {
+			ctx.Error(http.StatusUnprocessableEntity, err)
 		} else {
-			c.Error(http.StatusInternalServerError, err)
+			ctx.Error(http.StatusInternalServerError, err)
 		}
+
 		return
 	}
 
-	c.JSON(http.StatusCreated, models.NewDeck(deck))
+	ctx.JSON(http.StatusCreated, models.NewDeck(deck))
 }
 
-// OpenDeckInput input for opening a deck
+// OpenDeckInput input for opening a deck.
 type OpenDeckInput struct {
-	Id string `in:"path=id"`
+	ID string `in:"path=id"`
 }
 
-// CreateDeck open a deck
+// CreateDeck open a deck.
 func OpenDeck(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation GET /deck/{id} deck openDeck
 	//
@@ -137,32 +139,33 @@ func OpenDeck(w http.ResponseWriter, r *http.Request) {
 	//     schema:
 	//       "$ref": "#/definitions/APIError"
 
-	c := context.NewContext(w, r)
+	ctx := context.NewContext(w, r)
 
 	input := r.Context().Value(httpin.Input).(*OpenDeckInput)
 
-	deck, err := service.GetDeckById(input.Id)
+	deck, err := service.GetDeckByID(input.ID)
 	if err != nil {
-		if models.IsErrInvalidId(err) {
-			c.Error(http.StatusUnprocessableEntity, err)
-		} else if models.IsErrDeckNotFound(err) {
-			c.Error(http.StatusNotFound, err)
+		if models.IsInvalidIDError(err) {
+			ctx.Error(http.StatusUnprocessableEntity, err)
+		} else if models.IsDeckNotFoundError(err) {
+			ctx.Error(http.StatusNotFound, err)
 		} else {
-			c.Error(http.StatusInternalServerError, err)
+			ctx.Error(http.StatusInternalServerError, err)
 		}
+
 		return
 	}
 
-	c.JSON(http.StatusOK, models.NewDeckWithCards(deck))
+	ctx.JSON(http.StatusOK, models.NewDeckWithCards(deck))
 }
 
-// DrawCardInput input for drawing cards from a deck
+// DrawCardInput input for drawing cards from a deck.
 type DrawCardInput struct {
-	Id    string `in:"path=id"`
+	ID    string `in:"path=id"`
 	Count int    `in:"query=count;default=1"`
 }
 
-// CreateDeck draw cards from a deck
+// CreateDeck draw cards from a deck.
 func DrawCard(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation POST /deck/{id}/draw deck drawDeck
 	//
@@ -200,21 +203,22 @@ func DrawCard(w http.ResponseWriter, r *http.Request) {
 	//     schema:
 	//       "$ref": "#/definitions/APIError"
 
-	c := context.NewContext(w, r)
+	ctx := context.NewContext(w, r)
 	input := r.Context().Value(httpin.Input).(*DrawCardInput)
 
-	cards, err := service.DrawFromDeckById(input.Id, input.Count)
+	cards, err := service.DrawFromDeckByID(input.ID, input.Count)
 	if err != nil {
-		if models.IsErrInvalidId(err) ||
-			models.IsErrDeckRemainingExceeded(err) {
-			c.Error(http.StatusUnprocessableEntity, err)
-		} else if models.IsErrDeckNotFound(err) {
-			c.Error(http.StatusNotFound, err)
+		if models.IsInvalidIDError(err) ||
+			models.IsDeckRemainingExceededError(err) {
+			ctx.Error(http.StatusUnprocessableEntity, err)
+		} else if models.IsDeckNotFoundError(err) {
+			ctx.Error(http.StatusNotFound, err)
 		} else {
-			c.Error(http.StatusInternalServerError, err)
+			ctx.Error(http.StatusInternalServerError, err)
 		}
+
 		return
 	}
 
-	c.JSON(http.StatusOK, models.NewCards(cards))
+	ctx.JSON(http.StatusOK, models.NewCards(cards))
 }

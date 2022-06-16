@@ -2,80 +2,85 @@ package models
 
 import "fmt"
 
-// ErrInvalidCardCode represents an error that tag with such name already exists.
-type ErrInvalidCardCode struct {
+// InvalidCardCodeError represents an error that tag with such name already exists.
+type InvalidCardCodeError struct {
 	CardCode string
 }
 
-// IsErrInvalidCardCode checks if an error is an ErrInvalidCardCode.
-func IsErrInvalidCardCode(err error) bool {
-	_, ok := err.(ErrInvalidCardCode)
+// IsInvalidCardCodeError checks if an error is an InvalidCardCodeError.
+func IsInvalidCardCodeError(err error) bool {
+	_, ok := err.(InvalidCardCodeError)
+
 	return ok
 }
 
-func (err ErrInvalidCardCode) Error() string {
+func (err InvalidCardCodeError) Error() string {
 	return fmt.Sprintf("invalid card code [code: %s]", err.CardCode)
 }
 
-// ErrDuplicateCardCode represents an error that tag with such name already exists.
-type ErrDuplicateCardCode struct {
+// DuplicateCardCodeError represents an error that tag with such name already exists.
+type DuplicateCardCodeError struct {
 	CardCode string
 }
 
-// IsErrDuplicateCardCode checks if an error is an ErrDuplicateCardCode.
-func IsErrDuplicateCardCode(err error) bool {
-	_, ok := err.(ErrDuplicateCardCode)
+// IsDuplicateCardCodeError checks if an error is an DuplicateCardCodeError.
+func IsDuplicateCardCodeError(err error) bool {
+	_, ok := err.(DuplicateCardCodeError)
+
 	return ok
 }
 
-func (err ErrDuplicateCardCode) Error() string {
+func (err DuplicateCardCodeError) Error() string {
 	return fmt.Sprintf("duplicate card code [code: %s]", err.CardCode)
 }
 
-// ErrDeckNotFound will be thrown if id cannot be found
-type ErrDeckNotFound struct {
-	Id string
+// DeckNotFoundError will be thrown if id cannot be found.
+type DeckNotFoundError struct {
+	ID string
 }
 
-// Error returns the error message
-func (err ErrDeckNotFound) Error() string {
-	return fmt.Sprintf("deck not found [Id: %s]", err.Id)
+// Error returns the error message.
+func (err DeckNotFoundError) Error() string {
+	return fmt.Sprintf("deck not found [Id: %s]", err.ID)
 }
 
-// IsErrDeckNotFound checks if an error is a ErrDeckNotFound.
-func IsErrDeckNotFound(err error) bool {
-	_, ok := err.(ErrDeckNotFound)
+// IsDeckNotFoundError checks if an error is a DeckNotFoundError.
+func IsDeckNotFoundError(err error) bool {
+	_, ok := err.(DeckNotFoundError)
+
 	return ok
 }
 
-// ErrInvalidId represents an error that tag with such name already exists.
-type ErrInvalidId struct {
-	Id string
+// InvalidIDError represents an error that tag with such name already exists.
+type InvalidIDError struct {
+	ID string
 }
 
-// IsErrInvalidId checks if an error is an ErrInvalidId.
-func IsErrInvalidId(err error) bool {
-	_, ok := err.(ErrInvalidId)
+// IsInvalidIDError checks if an error is an InvalidIDError.
+func IsInvalidIDError(err error) bool {
+	_, ok := err.(InvalidIDError)
+
 	return ok
 }
 
-func (err ErrInvalidId) Error() string {
-	return fmt.Sprintf("invalid id format [id: %s]", err.Id)
+func (err InvalidIDError) Error() string {
+	return fmt.Sprintf("invalid id format [id: %s]", err.ID)
 }
 
-// ErrDeckRemainingExceeded will be thrown if id cannot be found
-type ErrDeckRemainingExceeded struct {
+// DeckRemainingExceededError will be thrown if id cannot be found.
+type DeckRemainingExceededError struct {
 	Count     int
 	Remaining int
 }
 
-// Error returns the error message
-func (err ErrDeckRemainingExceeded) Error() string {
+// Error returns the error message.
+func (err DeckRemainingExceededError) Error() string {
 	return fmt.Sprintf("the requested number of cards (%d) exceeds the cards in the deck (%d)", err.Count, err.Remaining)
 }
 
-// IsErrDeckRemainingExceeded checks if an error is a ErrDeckRemainingExceeded.
-func IsErrDeckRemainingExceeded(err error) bool {
-	_, ok := err.(ErrDeckRemainingExceeded)
+// IsDeckRemainingExceededError checks if an error is a DeckRemainingExceededError.
+func IsDeckRemainingExceededError(err error) bool {
+	_, ok := err.(DeckRemainingExceededError)
+
 	return ok
 }

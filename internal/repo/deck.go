@@ -8,7 +8,7 @@ import (
 )
 
 type Deck struct {
-	Id        string `gorm:"type:uuid;primaryKey"`
+	ID        string `gorm:"type:uuid;primaryKey"`
 	Shuffled  bool
 	Remaining int       `gorm:"default:52"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
@@ -18,7 +18,7 @@ type Deck struct {
 }
 
 type DeckCard struct {
-	DeckId   string `gorm:"primaryKey"`
+	DeckID   string `gorm:"primaryKey"`
 	CardCode string `gorm:"primaryKey"`
 	Order    int
 
@@ -31,7 +31,8 @@ func init() {
 	RegisterModel(new(DeckCard))
 }
 
-func (u *Deck) BeforeCreate(tx *gorm.DB) (err error) {
-	u.Id = uuid.NewString()
+func (u *Deck) BeforeCreate(tx *gorm.DB) error {
+	u.ID = uuid.NewString()
+
 	return nil
 }

@@ -4,22 +4,23 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
+
 	"scenario/internal/models"
 	"scenario/internal/repo"
-	"strings"
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
 )
 
-// CreateDeckOptions holds options to create a Deck
+// CreateDeckOptions holds options to create a Deck.
 type CreateDeckOptions struct {
 	Cards    string
 	Shuffled bool
 }
 
-// CreateDeck creates a Deck
+// CreateDeck creates a Deck.
 func CreateDeck(opts CreateDeckOptions) (*repo.Deck, error) {
 	allCards := repo.AllCard()
 
@@ -55,14 +56,13 @@ func CreateDeck(opts CreateDeckOptions) (*repo.Deck, error) {
 	deck := &repo.Deck{Shuffled: opts.Shuffled, Remaining: len(cards), Cards: make([]*repo.DeckCard, len(cards))}
 	for i, c := range cards {
 		deck.Cards[i] = &repo.DeckCard{
-			DeckId:   deck.Id,
+			DeckID:   deck.ID,
 			CardCode: c.Code,
 			Order:    i + 1,
 		}
 	}
 
-	result := db.Create(deck)
-	if result.Error != nil {
+	if result := db.Create(deck); result.Error != nil {
 		return nil, fmt.Errorf("insert deck: %v", result.Error)
 	}
 
@@ -70,9 +70,8 @@ func CreateDeck(opts CreateDeckOptions) (*repo.Deck, error) {
 }
 
 // GetDeck returns the deck with the given id.
-func GetDeckById(id string) (*repo.Deck, error) {
-
-	if err := ValidateId(id); err != nil {
+func GetDeckByID(deckID string) (*repo.Deck, error) {
+	if err := ValidateID(deckID); err != nil {
 		return nil, err
 	}
 
@@ -83,22 +82,21 @@ func GetDeckById(id string) (*repo.Deck, error) {
 	result := db.Preload("Cards", func(db *gorm.DB) *gorm.DB {
 		return db.Order("deck_cards.order ASC")
 	},
-	).Preload("Cards.Card").Where("id = ?", id).First(deck)
+	).Preload("Cards.Card").Where("id = ?", deckID).First(deck)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, models.ErrDeckNotFound{Id: id}
-		} else {
-			return nil, fmt.Errorf("fetching deck: %v", result.Error)
+			return nil, models.DeckNotFoundError{ID: deckID}
 		}
+
+		return nil, fmt.Errorf("fetching deck: %v", result.Error)
 	}
 
 	return deck, nil
 }
 
-// DrawFromDeckById draws cards from the deck. returns the drawn cards.
-func DrawFromDeckById(id string, count int) ([]*repo.DeckCard, error) {
-
-	if err := ValidateId(id); err != nil {
+// DrawFromDeckByID draws cards from the deck. returns the drawn cards.
+func DrawFromDeckByID(deckID string, count int) ([]*repo.DeckCard, error) {
+	if err := ValidateID(deckID); err != nil {
 		return nil, err
 	}
 
@@ -109,19 +107,19 @@ func DrawFromDeckById(id string, count int) ([]*repo.DeckCard, error) {
 	result := db.Preload("Cards", func(db *gorm.DB) *gorm.DB {
 		return db.Order("deck_cards.order ASC").Limit(count)
 	},
-	).Preload("Cards.Card").Where("id = ?", id).First(deck)
+	).Preload("Cards.Card").Where("id = ?", deckID).First(deck)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, models.ErrDeckNotFound{Id: id}
-		} else {
-			return nil, fmt.Errorf("fetching deck: %v", result.Error)
+			return nil, models.DeckNotFoundError{ID: deckID}
 		}
+
+		return nil, fmt.Errorf("fetching deck: %v", result.Error)
 	}
 
 	// if the requested number of cards is larger than the cards in the deck
 	if deck.Remaining < count || len(deck.Cards) < count {
-		return nil, models.ErrDeckRemainingExceeded{Count: count, Remaining: deck.Remaining}
+		return nil, models.DeckRemainingExceededError{Count: count, Remaining: deck.Remaining}
 	}
 
 	// update deck and its relations in one transaction to make
@@ -143,7 +141,6 @@ func DrawFromDeckById(id string, count int) ([]*repo.DeckCard, error) {
 		// return nil will commit the whole transaction
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -152,43 +149,43 @@ func DrawFromDeckById(id string, count int) ([]*repo.DeckCard, error) {
 }
 
 func ValidateCards(cards []string) error {
-	frequency_map := make(map[string]bool)
+	frequencyMap := make(map[string]bool)
 
-	for _, c := range cards {
-		if _, exists := frequency_map[c]; exists {
-			return models.ErrDuplicateCardCode{
-				CardCode: c,
+	for _, card := range cards {
+		if _, exists := frequencyMap[card]; exists {
+			return models.DuplicateCardCodeError{
+				CardCode: card,
 			}
 		}
-		frequency_map[c] = true
 
-		if len := len(c); len > 3 || len == 0 {
-			return models.ErrInvalidCardCode{
-				CardCode: c,
+		frequencyMap[card] = true
+
+		if codeLen := len(card); codeLen > 3 || codeLen == 0 {
+			return models.InvalidCardCodeError{
+				CardCode: card,
 			}
 		}
 
 		values := repo.CardsValues()
 		suits := repo.CardsSuits()
 
-		value := repo.GetLongValue(c[:len(c)-1])
-		suit := repo.GetLongSuit(c[len(c)-1:])
+		value := repo.GetLongValue(card[:len(card)-1])
+		suit := repo.GetLongSuit(card[len(card)-1:])
 
 		if !slices.Contains(values, value) || !slices.Contains(suits, suit) {
-			return models.ErrInvalidCardCode{
-				CardCode: c,
+			return models.InvalidCardCodeError{
+				CardCode: card,
 			}
 		}
-
 	}
+
 	return nil
 }
 
-func ValidateId(id string) error {
-	_, err := uuid.Parse(id)
-	if err != nil {
-		return models.ErrInvalidId{
-			Id: id,
+func ValidateID(id string) error {
+	if _, err := uuid.Parse(id); err != nil {
+		return models.InvalidIDError{
+			ID: id,
 		}
 	}
 

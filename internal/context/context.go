@@ -18,16 +18,17 @@ func NewContext(w http.ResponseWriter, req *http.Request) *Context {
 	}
 }
 
-// JSON render content as JSON
+// JSON render content as JSON.
 func (ctx *Context) Text(status int, response string) {
 	ctx.Resp.WriteHeader(status)
 	ctx.Resp.Write([]byte(response))
 }
 
-// JSON render content as JSON
+// JSON render content as JSON.
 func (ctx *Context) JSON(status int, content interface{}) {
 	ctx.Resp.Header().Set("Content-Type", "application/json;charset=utf-8")
 	ctx.Resp.WriteHeader(status)
+
 	if err := json.NewEncoder(ctx.Resp).Encode(content); err != nil {
 		ctx.ServerError("Render JSON failed", err)
 	}

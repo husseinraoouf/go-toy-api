@@ -1,14 +1,15 @@
-package main
+package main_test
 
 import (
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"testing"
+
 	"scenario/internal/api"
 	"scenario/internal/repo"
 	"scenario/internal/setting"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )

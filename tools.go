@@ -9,4 +9,7 @@ import (
 
 	// for golangci-lint
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
+
+	// for gofumpt
+	_ "mvdan.cc/gofumpt"
 )

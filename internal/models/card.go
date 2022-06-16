@@ -11,7 +11,6 @@ type Card struct {
 }
 
 func NewCards(cards []*repo.DeckCard) []Card {
-
 	response := make([]Card, len(cards))
 	for i, v := range cards {
 		response[i] = Card{

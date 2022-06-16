@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	"scenario/internal/repo"
 	"scenario/internal/setting"
 )
 
 func Migrate() error {
-
 	var err error
 
 	err = setting.LoadConfig()
@@ -35,9 +35,8 @@ func Migrate() error {
 	return nil
 }
 
-// syncAllTables sync the schemas of all tables, is required by unit test code
+// syncAllTables sync the schemas of all tables, is required by unit test code.
 func syncAllTables() error {
-
 	db := repo.GetDatabase()
 	tables := repo.Tables()
 
@@ -50,7 +49,6 @@ func syncAllTables() error {
 }
 
 func seedDatabase() error {
-
 	seedFuncs := repo.SeedFuncs()
 
 	for _, seedFunc := range seedFuncs {

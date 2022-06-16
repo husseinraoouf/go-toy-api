@@ -23,14 +23,15 @@ func LoadConfig() error {
 	viper.AddConfigPath(".")      // add current directory to config search paths
 
 	var err error
+
 	err = viper.ReadInConfig() // Find and read the config file
 	if err != nil {
-		return fmt.Errorf("unable to decode into struct, %v", err)
+		return fmt.Errorf("unable to decode into struct, %w", err)
 	}
 
 	err = viper.Unmarshal(&Config)
 	if err != nil {
-		return fmt.Errorf("unable to decode into struct, %v", err)
+		return fmt.Errorf("unable to decode into struct, %w", err)
 	}
 
 	return nil

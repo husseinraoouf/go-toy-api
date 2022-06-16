@@ -2,6 +2,7 @@ package repo
 
 import (
 	"fmt"
+
 	"scenario/internal/setting"
 
 	"gorm.io/driver/postgres"
@@ -27,9 +28,10 @@ func SeedFuncs() []func() error {
 	return seedFuncs
 }
 
-// RegisterModel registers model, if initfunc provided, it will be invoked after data model sync
+// RegisterModel registers model, if initfunc provided, it will be invoked after data model sync.
 func RegisterModel(bean interface{}, seedFunc ...func() error) {
 	tables = append(tables, bean)
+
 	if len(seedFuncs) > 0 && seedFunc[0] != nil {
 		seedFuncs = append(seedFuncs, seedFunc[0])
 	}
@@ -46,7 +48,7 @@ func InitDatabase() error {
 	return nil
 }
 
-// newDatabaseConnection returns a new gorm DB from the configuration
+// newDatabaseConnection returns a new gorm DB from the configuration.
 func newDatabaseConnection() (*gorm.DB, error) {
 	connStr, err := DBConnStr()
 	if err != nil {
@@ -64,10 +66,11 @@ func newDatabaseConnection() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return conn, nil
 }
 
-// DBConnStr returns database connection string
+// DBConnStr returns database connection string.
 func DBConnStr() (string, error) {
 	connStr := ""
 
@@ -85,7 +88,7 @@ func DBConnStr() (string, error) {
 	return connStr, nil
 }
 
-// Set gorm DB globally
+// Set gorm DB globally.
 func setDefaultDatabaseConnection(conn *gorm.DB) {
 	db = conn
 }

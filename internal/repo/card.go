@@ -12,6 +12,8 @@ type Card struct {
 	Decks []*DeckCard `gorm:"foreignKey:CardCode"`
 }
 
+const countOfAllCards = 52
+
 var allCards []*Card
 
 func AllCard() []*Card {
@@ -28,9 +30,7 @@ func CardsSuits() []string {
 
 func init() {
 	initAllCards()
-
 	RegisterModel(new(Card), func() error {
-
 		result := db.Clauses(clause.OnConflict{DoNothing: true}).Create(allCards)
 		if result.Error != nil {
 			return result.Error
@@ -38,7 +38,6 @@ func init() {
 
 		return nil
 	})
-
 }
 
 func GetShortValue(value string) string {
@@ -94,7 +93,8 @@ func initAllCards() {
 	values := CardsValues()
 	suits := CardsSuits()
 
-	allCards = make([]*Card, 52)
+	allCards = make([]*Card, countOfAllCards)
+
 	for i, suit := range suits {
 		for j, value := range values {
 			code := GetShortValue(value) + GetShortSuit(suit)

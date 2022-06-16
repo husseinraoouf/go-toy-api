@@ -2,12 +2,12 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
+
 	"scenario/internal/api"
 	"scenario/internal/repo"
 	"scenario/internal/setting"
-
-	"net/http"
 
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
