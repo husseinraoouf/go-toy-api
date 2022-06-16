@@ -148,6 +148,7 @@ func DrawFromDeckByID(deckID string, count int) ([]*repo.DeckCard, error) {
 	return deck.Cards, nil
 }
 
+// ValidateCards validates the cards filter slice.
 func ValidateCards(cards []string) error {
 	frequencyMap := make(map[string]bool)
 
@@ -182,6 +183,7 @@ func ValidateCards(cards []string) error {
 	return nil
 }
 
+// ValidateID validates that the id is in UUID format.
 func ValidateID(id string) error {
 	if _, err := uuid.Parse(id); err != nil {
 		return models.InvalidIDError{

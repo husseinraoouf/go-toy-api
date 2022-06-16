@@ -19,6 +19,7 @@ type DeckWithCards struct {
 	Cards     []Card `json:"cards"`
 }
 
+// NewDeck creates new deck from repo struct.
 func NewDeck(deck *repo.Deck) *Deck {
 	return &Deck{
 		DeckID:    deck.ID,
@@ -27,6 +28,7 @@ func NewDeck(deck *repo.Deck) *Deck {
 	}
 }
 
+// NewDeckWithCards creates new deck with cards from repo struct.
 func NewDeckWithCards(deck *repo.Deck) *DeckWithCards {
 	response := &DeckWithCards{
 		DeckID:    deck.ID,

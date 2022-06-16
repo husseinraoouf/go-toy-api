@@ -2,7 +2,7 @@ package models
 
 import "fmt"
 
-// InvalidCardCodeError represents an error that tag with such name already exists.
+// InvalidCardCodeError represents an error that card code is in invalid format.
 type InvalidCardCodeError struct {
 	CardCode string
 }
@@ -14,11 +14,12 @@ func IsInvalidCardCodeError(err error) bool {
 	return ok
 }
 
+// Error returns the error message.
 func (err InvalidCardCodeError) Error() string {
 	return fmt.Sprintf("invalid card code [code: %s]", err.CardCode)
 }
 
-// DuplicateCardCodeError represents an error that tag with such name already exists.
+// DuplicateCardCodeError represents an error that card code exist twice in cards filter.
 type DuplicateCardCodeError struct {
 	CardCode string
 }
@@ -30,6 +31,7 @@ func IsDuplicateCardCodeError(err error) bool {
 	return ok
 }
 
+// Error returns the error message.
 func (err DuplicateCardCodeError) Error() string {
 	return fmt.Sprintf("duplicate card code [code: %s]", err.CardCode)
 }
@@ -51,7 +53,7 @@ func IsDeckNotFoundError(err error) bool {
 	return ok
 }
 
-// InvalidIDError represents an error that tag with such name already exists.
+// InvalidIDError represents an error that ID is in invalid format.
 type InvalidIDError struct {
 	ID string
 }
@@ -63,11 +65,12 @@ func IsInvalidIDError(err error) bool {
 	return ok
 }
 
+// Error returns the error message.
 func (err InvalidIDError) Error() string {
 	return fmt.Sprintf("invalid id format [id: %s]", err.ID)
 }
 
-// DeckRemainingExceededError will be thrown if id cannot be found.
+// DeckRemainingExceededError will be thrown if requests cards of the deck is more than the cards in the deck.
 type DeckRemainingExceededError struct {
 	Count     int
 	Remaining int

@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"scenario/internal/api"
@@ -20,13 +19,11 @@ func TestPingRoute(t *testing.T) {
 	err = setting.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
-		os.Exit(1)
 	}
 
 	err = repo.InitDatabase()
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
-		os.Exit(1)
 	}
 
 	router := api.Routes()

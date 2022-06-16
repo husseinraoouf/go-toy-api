@@ -6,11 +6,13 @@ import (
 	"github.com/spf13/viper"
 )
 
+// config represents the app config.
 type config struct {
-	Database DatabaseConfig
+	Database databaseConfig
 }
 
-type DatabaseConfig struct {
+// databaseConfig represents the database config.
+type databaseConfig struct {
 	Type             string
 	ConnectionString string
 	Path             string
@@ -18,6 +20,7 @@ type DatabaseConfig struct {
 
 var Config config
 
+// LoadConfig loads config from files.
 func LoadConfig() error {
 	viper.SetConfigName("config") // name of config file (without extension)
 	viper.AddConfigPath(".")      // add current directory to config search paths

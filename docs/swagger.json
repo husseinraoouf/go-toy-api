@@ -10,8 +10,8 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "the purpose of this application is to provide an application\nthat is using plain go code to define an API\n\nThis should demonstrate all the possible comment annotations\nthat are available to turn go code into a fully compliant swagger 2.0 spec",
-    "title": "Petstore API.",
+    "description": "REST API for Scenario Card Game",
+    "title": "Scenario API.",
     "contact": {
       "name": "ElHussein Abdelraouf",
       "email": "hussein@raoufs.me"
@@ -157,6 +157,12 @@
               }
             }
           },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/APINotFound"
+            }
+          },
           "422": {
             "description": "validation error",
             "schema": {
@@ -233,7 +239,7 @@
       "properties": {
         "deck_id": {
           "type": "string",
-          "x-go-name": "DeckId"
+          "x-go-name": "DeckID"
         },
         "remaining": {
           "type": "integer",
@@ -261,7 +267,7 @@
         },
         "deck_id": {
           "type": "string",
-          "x-go-name": "DeckId"
+          "x-go-name": "DeckID"
         },
         "remaining": {
           "type": "integer",

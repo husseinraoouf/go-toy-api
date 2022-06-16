@@ -16,14 +16,17 @@ var (
 	seedFuncs []func() error
 )
 
+// GetDatabase returns a database connection.
 func GetDatabase() *gorm.DB {
 	return db
 }
 
+// Tables returns tables registered by repo models.
 func Tables() []interface{} {
 	return tables
 }
 
+// SeedFuncs returns seed functions registered by repo models.
 func SeedFuncs() []func() error {
 	return seedFuncs
 }
@@ -37,6 +40,7 @@ func RegisterModel(bean interface{}, seedFunc ...func() error) {
 	}
 }
 
+// InitDatabase initializes the database and store it in global variable `db`.
 func InitDatabase() error {
 	gormDB, err := newDatabaseConnection()
 	if err != nil {

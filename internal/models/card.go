@@ -10,6 +10,7 @@ type Card struct {
 	Code  string `json:"code"`
 }
 
+// NewCards creates new cards slice from repo struct.
 func NewCards(cards []*repo.DeckCard) []Card {
 	response := make([]Card, len(cards))
 	for i, v := range cards {

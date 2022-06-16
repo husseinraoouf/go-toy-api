@@ -1,3 +1,21 @@
+// Package classification Scenario API.
+//
+// REST API for Scenario Card Game
+//
+//     Schemes: http
+//     Host: localhost:8080
+//     BasePath: /
+//     Version: 0.0.1
+//     License: MIT http://opensource.org/licenses/MIT
+//     Contact: ElHussein Abdelraouf<hussein@raoufs.me>
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:meta
 package api
 
 import (
@@ -12,6 +30,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
+// Routes is to get api routes.
 func Routes() chi.Router {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)

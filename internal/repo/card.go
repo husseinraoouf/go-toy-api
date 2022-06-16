@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// Card represents a card in the database.
 type Card struct {
 	Code  string `gorm:"type:VARCHAR(3);primaryKey"`
 	Value string
@@ -16,14 +17,17 @@ const countOfAllCards = 52
 
 var allCards []*Card
 
+// AllCard returns a slice with all possible cards.
 func AllCard() []*Card {
 	return allCards
 }
 
+// CardsValues returns a slice with all possible card values.
 func CardsValues() []string {
 	return []string{"ACE", "2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING"}
 }
 
+// CardsSuits returns a slice with all possible card suits.
 func CardsSuits() []string {
 	return []string{"SPADES", "DIAMONDS", "CLUBS", "HEARTS"}
 }
@@ -40,6 +44,8 @@ func init() {
 	})
 }
 
+// GetShortValue gets the short card value from the long value.
+// "ACE" -> "A".
 func GetShortValue(value string) string {
 	valuesMap := map[string]string{
 		"ACE":   "A",
@@ -55,6 +61,8 @@ func GetShortValue(value string) string {
 	return value
 }
 
+// GetLongValue gets the long card value from the short value.
+// "A" -> "ACE".
 func GetLongValue(value string) string {
 	valuesMap := map[string]string{
 		"A": "ACE",
@@ -70,10 +78,14 @@ func GetLongValue(value string) string {
 	return value
 }
 
+// GetShortSuit gets the short card suit from the long suit.
+// "SPADES" -> "S".
 func GetShortSuit(suit string) string {
 	return suit[0:1]
 }
 
+// GetLongSuit gets the long card suit from the short suit.
+// "S" -> "SPADES".
 func GetLongSuit(suit string) string {
 	suitsMap := map[string]string{
 		"S": "SPADES",
@@ -89,6 +101,7 @@ func GetLongSuit(suit string) string {
 	return suit
 }
 
+// initAllCards generates all possible cards and put it in global variable `allCards`.
 func initAllCards() {
 	values := CardsValues()
 	suits := CardsSuits()

@@ -1,25 +1,3 @@
-// Package classification Petstore API.
-//
-// the purpose of this application is to provide an application
-// that is using plain go code to define an API
-//
-// This should demonstrate all the possible comment annotations
-// that are available to turn go code into a fully compliant swagger 2.0 spec
-//
-//     Schemes: http
-//     Host: localhost:8080
-//     BasePath: /
-//     Version: 0.0.1
-//     License: MIT http://opensource.org/licenses/MIT
-//     Contact: ElHussein Abdelraouf<hussein@raoufs.me>
-//
-//     Consumes:
-//     - application/json
-//
-//     Produces:
-//     - application/json
-//
-// swagger:meta
 package deck
 
 import (
@@ -32,13 +10,13 @@ import (
 	"github.com/ggicci/httpin"
 )
 
-// CreateDeckInput input for creating a deck.
+// CreateDeckInput is input for creating a deck.
 type CreateDeckInput struct {
 	Cards    string `in:"query=cards"`
 	Shuffled bool   `in:"query=shuffled;default=false"`
 }
 
-// CreateDeck create a deck.
+// CreateDeck creates a deck.
 func CreateDeck(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation POST /deck deck createDeck
 	//
@@ -98,12 +76,12 @@ func CreateDeck(w http.ResponseWriter, r *http.Request) {
 	ctx.JSON(http.StatusCreated, models.NewDeck(deck))
 }
 
-// OpenDeckInput input for opening a deck.
+// OpenDeckInput is input for opening a deck.
 type OpenDeckInput struct {
 	ID string `in:"path=id"`
 }
 
-// CreateDeck open a deck.
+// CreateDeck opens a deck.
 func OpenDeck(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation GET /deck/{id} deck openDeck
 	//
@@ -159,13 +137,13 @@ func OpenDeck(w http.ResponseWriter, r *http.Request) {
 	ctx.JSON(http.StatusOK, models.NewDeckWithCards(deck))
 }
 
-// DrawCardInput input for drawing cards from a deck.
+// DrawCardInput is input for drawing cards from a deck.
 type DrawCardInput struct {
 	ID    string `in:"path=id"`
 	Count int    `in:"query=count;default=1"`
 }
 
-// CreateDeck draw cards from a deck.
+// CreateDeck draws cards from a deck.
 func DrawCard(w http.ResponseWriter, r *http.Request) {
 	// swagger:operation POST /deck/{id}/draw deck drawDeck
 	//
@@ -197,6 +175,11 @@ func DrawCard(w http.ResponseWriter, r *http.Request) {
 	//     description: validation error
 	//     schema:
 	//       "$ref": "#/definitions/APIValidationError"
+	//
+	//   '404':
+	//     description: not found
+	//     schema:
+	//       "$ref": "#/definitions/APINotFound"
 	//
 	//   default:
 	//     description: unexpected error
