@@ -1,0 +1,7 @@
+{
+  "Database": {
+    "Type": "sqlite",
+    "Path": "scenario.db",
+    "ConnectionString": "postgres://postgres:U85KqBaVhmHHag@db.pakejcnnzfeefrrkbttf.supabase.co/postgres?sslmode=disable"
+  }
+}
