@@ -1,0 +1,280 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "the purpose of this application is to provide an application\nthat is using plain go code to define an API\n\nThis should demonstrate all the possible comment annotations\nthat are available to turn go code into a fully compliant swagger 2.0 spec",
+    "title": "Petstore API.",
+    "contact": {
+      "name": "ElHussein Abdelraouf",
+      "email": "hussein@raoufs.me"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
+    "version": "0.0.1"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/deck": {
+      "post": {
+        "description": "creates a new Deck",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "deck"
+        ],
+        "operationId": "createDeck",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "description": "cards to filter by",
+            "name": "cards",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "description": "whether the cards in the deck should be shuffled or not",
+            "name": "shuffled",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "deck created",
+            "schema": {
+              "$ref": "#/definitions/deck"
+            }
+          },
+          "422": {
+            "description": "validation error",
+            "schema": {
+              "$ref": "#/definitions/APIValidationError"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      }
+    },
+    "/deck/{id}": {
+      "get": {
+        "description": "opens a Deck",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "deck"
+        ],
+        "operationId": "openDeck",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the deck",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deck with cards response",
+            "schema": {
+              "$ref": "#/definitions/deckWithCards"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/APINotFound"
+            }
+          },
+          "422": {
+            "description": "validation error",
+            "schema": {
+              "$ref": "#/definitions/APIValidationError"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      }
+    },
+    "/deck/{id}/draw": {
+      "post": {
+        "description": "draw cards from a deck",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "deck"
+        ],
+        "operationId": "drawDeck",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the deck",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "how many cards to draw from the deck",
+            "name": "count",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "cards response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/card"
+              }
+            }
+          },
+          "422": {
+            "description": "validation error",
+            "schema": {
+              "$ref": "#/definitions/APIValidationError"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "APIError": {
+      "description": "APIError is error format response",
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "scenario/context"
+    },
+    "APINotFound": {
+      "description": "APINotFound is a not found empty response",
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "scenario/context"
+    },
+    "APIValidationError": {
+      "description": "APIValidationError is error format response related to input validation",
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "scenario/context"
+    },
+    "card": {
+      "type": "object",
+      "title": "Card represents a card.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "x-go-name": "Code"
+        },
+        "suit": {
+          "type": "string",
+          "x-go-name": "Suit"
+        },
+        "value": {
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-name": "Card",
+      "x-go-package": "scenario/structs"
+    },
+    "deck": {
+      "type": "object",
+      "title": "Deck represents a deck.",
+      "properties": {
+        "deck_id": {
+          "type": "string",
+          "x-go-name": "DeckId"
+        },
+        "remaining": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Remaining"
+        },
+        "shuffled": {
+          "type": "boolean",
+          "x-go-name": "Shuffled"
+        }
+      },
+      "x-go-name": "Deck",
+      "x-go-package": "scenario/structs"
+    },
+    "deckWithCards": {
+      "type": "object",
+      "title": "DeckWithCards represents an Deck with cards.",
+      "properties": {
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/card"
+          },
+          "x-go-name": "Cards"
+        },
+        "deck_id": {
+          "type": "string",
+          "x-go-name": "DeckId"
+        },
+        "remaining": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Remaining"
+        },
+        "shuffled": {
+          "type": "boolean",
+          "x-go-name": "Shuffled"
+        }
+      },
+      "x-go-name": "DeckWithCards",
+      "x-go-package": "scenario/structs"
+    }
+  }
+}
