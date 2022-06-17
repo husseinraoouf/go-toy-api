@@ -192,7 +192,7 @@
       "x-go-package": "scenario/internal/context"
     },
     "APINotFound": {
-      "description": "APINotFound is a not found empty response",
+      "description": "APINotFound is a not found response",
       "type": "object",
       "properties": {
         "message": {
