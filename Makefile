@@ -39,8 +39,8 @@ database_migrate:
 .PHONY: clean
 clean:
 	go clean
-	rm ${BINARY_NAME}
-	rm coverage.out
+	rm -f ${BINARY_NAME}
+	rm -f coverage.out
 
 .PHONY: test
 test:

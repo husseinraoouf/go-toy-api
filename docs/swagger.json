@@ -203,8 +203,8 @@
       "x-go-package": "scenario/internal/context"
     },
     "APIValidationError": {
-      "description": "APIValidationError is error format response related to input validation",
       "type": "object",
+      "title": "APIValidationError is error format response related to input validation.",
       "properties": {
         "message": {
           "type": "string",

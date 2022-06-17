@@ -48,7 +48,7 @@ type APIValidationError struct {
 	Message string `json:"message"`
 }
 
-// APINotFound is a not found empty response
+// APINotFound is a not found response
 // swagger:model APINotFound
 type APINotFound struct {
 	Message string `json:"message"`
