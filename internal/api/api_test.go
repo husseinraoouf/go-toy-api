@@ -2,14 +2,14 @@ package api_test
 
 import (
 	"net/http"
-	"scenario/internal/testutils"
 	"testing"
+
+	"scenario/internal/testutils"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPingRoute(t *testing.T) {
-
 	server := testutils.NewTestServer()
 
 	w := server.Get("/ping")

@@ -1,4 +1,4 @@
-package deck_test
+package service_test
 
 import (
 	"log"
@@ -22,7 +22,7 @@ func init() {
 func TestMain(m *testing.M) {
 	var err error
 
-	if err = setting.LoadTestConfigAtPath("../../.."); err != nil {
+	if err = setting.LoadTestConfigAtPath("../.."); err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
 

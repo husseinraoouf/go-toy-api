@@ -3,8 +3,9 @@ package testutils
 import (
 	"net/http"
 	"net/http/httptest"
-	"scenario/internal/api"
 	"strings"
+
+	"scenario/internal/api"
 
 	"github.com/go-chi/chi/v5"
 )

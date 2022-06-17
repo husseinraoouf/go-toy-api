@@ -10,6 +10,8 @@ linters-settings:
       - tx
       - w
       - r
+      - m1
+      - m2
   
   wsl:
     allow-separated-leading-comment: true

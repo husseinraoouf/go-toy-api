@@ -3,9 +3,10 @@ package api_test
 import (
 	"log"
 	"os"
+	"testing"
+
 	"scenario/internal/repo"
 	"scenario/internal/setting"
-	"testing"
 
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"

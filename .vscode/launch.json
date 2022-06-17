@@ -13,12 +13,19 @@
       "cwd": "${workspaceFolder}"
     },
     {
-        "name": "Migrate Database",
-        "type": "go",
-        "request": "launch",
-        "mode": "auto",
-        "program": "${workspaceFolder}/cmd/migration/main.go",
-        "cwd": "${workspaceFolder}"
-      }
+      "name": "Debug Current File Tests",
+      "type": "go",
+      "request": "launch",
+      "mode": "test",
+      "program": "${fileDirname}",
+    },
+    {
+      "name": "Migrate Database",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/migration/main.go",
+      "cwd": "${workspaceFolder}"
+    }
   ]
 }

@@ -80,7 +80,7 @@ func GetDeckByID(deckID string) (*repo.Deck, error) {
 	deck := new(repo.Deck)
 
 	result := db.Preload("Cards", func(db *gorm.DB) *gorm.DB {
-		return db.Order("deck_cards.order ASC")
+		return db.Order("deck_cards.[order] ASC")
 	},
 	).Preload("Cards.Card").Where("id = ?", deckID).First(deck)
 	if result.Error != nil {
@@ -105,7 +105,7 @@ func DrawFromDeckByID(deckID string, count int) ([]*repo.DeckCard, error) {
 	deck := new(repo.Deck)
 
 	result := db.Preload("Cards", func(db *gorm.DB) *gorm.DB {
-		return db.Order("deck_cards.order ASC").Limit(count)
+		return db.Order("deck_cards.[order] ASC").Limit(count)
 	},
 	).Preload("Cards.Card").Where("id = ?", deckID).First(deck)
 
