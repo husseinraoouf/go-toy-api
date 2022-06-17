@@ -14,8 +14,6 @@ make install_tools
 
 ## How to build
 
-it will run on port **8080**
-
 ```shell
 make build
 ```
@@ -50,7 +48,7 @@ make test
 make test_coverage
 ```
 
-## Other Commands Commands
+## Other Scripts
 
 ### To See All Avialable Commands
 
